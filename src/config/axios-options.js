@@ -7,6 +7,6 @@ axios.interceptors.request.use(config => {
     return config
 })
 
-axios.post('/login', { username: '2362086452', password: 'ylhm4523' }).then(res => {
-    localStorage.setItem('token', res.data.meta.data.token);
-});
+// axios.post('/login', { username: '2362086452', password: 'ylhm4523' }).then(res => {
+//     localStorage.setItem('token', res.data.meta.data.token);
+// });
