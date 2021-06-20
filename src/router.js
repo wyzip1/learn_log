@@ -17,12 +17,8 @@ const routes = [
             else next();
         }
     }, {
-        path: '/content',
-        component: () => import('./views/Content.vue'),
-        children: [{
-            path: 'detail/:id',
-            component: () => import('./components/Detail.vue')
-        }]
+        path: '/article/:id',
+        component: () => import('./views/Article.vue')
     },
 ];
 
