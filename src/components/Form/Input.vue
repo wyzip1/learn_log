@@ -40,6 +40,7 @@ const props = defineProps({
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    background-color: #fff;
 }
 
 .input-group input {

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import axios from 'axios';
 
 const routes = [
     {
@@ -10,14 +9,28 @@ const routes = [
         component: () => import('./views/Login.vue')
     }, {
         path: '/center',
+        name: 'center',
         component: () => import('./views/Center.vue'),
-        beforeEnter: async (to, from, next) => {
-            let { data } = await axios.post('/auth');
-            if (data.status) next('/login')
-            else next();
-        }
+        redirect: '/center/user',
+        children: [
+            {
+                path: 'edit',
+                name: 'edit',
+                component: () => import('./components/EditDoc.vue')
+            },
+            {
+                path: 'user',
+                name: 'user',
+                component: () => import('./views/User.vue')
+            },
+        ]
+    }, {
+        path: '/log',
+        name: 'log',
+        component: () => import('./views/Log.vue'),
     }, {
         path: '/article/:id',
+        name: 'article',
         component: () => import('./views/Article.vue')
     },
 ];

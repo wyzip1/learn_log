@@ -29,7 +29,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { doLoign } from "../api/user";
 let userInfo = JSON.parse(localStorage.getItem("userInfo") || "[]");
-const account = ref(userInfo?.username || "");
+const account = ref(userInfo?.account || "");
 const password = ref(userInfo?.password || "");
 const router = useRouter();
 
@@ -38,7 +38,7 @@ async function login() {
         meta: { data: userInfo },
         status,
     } = await doLoign({
-        username: account.value,
+        account: account.value,
         password: password.value,
     });
     if (status) return alert("账号或密码错误");
@@ -53,7 +53,7 @@ async function login() {
 <style scoped>
 .container {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 60px);
     background-image: url("../assets/login-bg.jpg");
     background-size: cover;
     background-repeat: no-repeat;

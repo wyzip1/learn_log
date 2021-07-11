@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <h1>{{ route.query.title }}</h1>
-        <p>{{ route.query.type }}</p>
-        <span>{{ route.query.updateTime }}--{{ route.query.username }}</span>
+        <h1>{{ doc.title }}</h1>
+        <p>{{ doc.type }}</p>
+        <span>{{ doc.updateTime }}--{{ doc.account }}</span>
         <div class="content" ref="con"></div>
     </div>
 </template>
@@ -13,11 +13,12 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import marked from "marked";
 import hljs from "highlight.js";
-import "highlight.js/styles/monokai-sublime.css"; // 引入高亮样式 这里我用的是sublime样式
-import { getChapterDetail } from "../api/chapter";
+import "highlight.js/styles/github-dark-dimmed.css";
+import { getChapterInfo } from "../api/chapter";
 
 const rendererMD = new marked.Renderer();
 const route = useRoute();
+const doc = ref({});
 const con = ref();
 
 marked.setOptions({
@@ -35,9 +36,11 @@ marked.setOptions({
 }); //基本设置
 
 onMounted(async () => {
-    let res = await getChapterDetail(route.params.id);
-    let content = res.meta.data.content;
-    con.value.innerHTML = marked(content).replace(
+    let res = await getChapterInfo(route.params.id);
+    let { data } = res.meta;
+    doc.value = data;
+    console.log(doc);
+    con.value.innerHTML = marked(data.content).replace(
         /<pre>/g,
         "<pre class='hljs'>"
     );
@@ -50,14 +53,21 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 0 60px;
+    padding: 50px 0;
+    min-height: calc(100vh - 60px);
     box-sizing: border-box;
+    background-image: url("../assets/login-bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .container .content {
     width: 75vw;
-    padding: 50px;
+    padding: 25px 50px;
     border-top: 1px solid #eee;
-    margin-top: 50px;
+    margin-top: 25px;
+    background-color: rgba(255, 255, 255, 0.6);
+    min-height: 65vh;
 }
 </style>

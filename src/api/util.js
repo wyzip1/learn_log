@@ -10,6 +10,5 @@ export default function ({ type, url, params }) {
             axios[method[type]](url, params)
                 .then(res => reslove(res.data)).catch(err => reject(err));
         }
-
     });
 }

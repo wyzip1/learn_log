@@ -1,40 +1,15 @@
 <template>
     <div class="container">
         <div class="search">
-            <Input
-                icon="fa-search"
-                class="input"
-                v-model="title"
-                @keydown.enter="search"
-            />
+            <Input icon="fa-search" class="input" v-model="title" />
             <Button value="查询" class="button" @click="search" />
-        </div>
-        <div class="chooseType" @change="changeType">
-            <label v-for="i in type" :key="i._id">
-                <input
-                    type="radio"
-                    name="type"
-                    :value="i._id"
-                    :checked="typeId === i._id"
-                />
-                <span>{{ i.name }}</span>
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    name="type"
-                    value=""
-                    :checked="typeId === ''"
-                />
-                <span>全部</span>
-            </label>
         </div>
         <transition-group name="doc" move-class="move">
             <div
                 class="doc"
-                v-for="doc in chapter.list"
+                v-for="doc in log.list"
                 :key="doc._id"
-                @click="linkToArticle(doc._id)"
+                @click="linkToArticle(doc)"
             >
                 <strong>
                     {{ doc.title }}
@@ -50,12 +25,7 @@
                 </p>
             </div>
         </transition-group>
-
-        <Pagination
-            :total="chapter.pages"
-            @onChange="search"
-            class="pagination"
-        />
+        <Pagination :total="log.pages" @onChange="search" class="pagination" />
     </div>
 </template>
 
@@ -63,42 +33,34 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { getChapterList } from "../api/chapter";
-import { getType } from "../api/type";
+import { getLogList } from "../api/chapter";
 import Input from "../components/Form/Input.vue";
 import Button from "../components/Form/Button.vue";
 import Pagination from "../components/Pagination.vue";
 
-const chapter = ref({ list: [], pages: 1 });
+const log = ref({ list: [], pages: 1 });
 const title = ref("");
-const type = ref([]);
-const typeId = ref("");
 const router = useRouter();
 
 onMounted(() => {
-    getType(false).then((typeList) => {
-        if (!typeList.status) type.value = typeList.meta.data;
-    });
     search();
 });
 
 async function search(current = 1) {
-    let res = await getChapterList({
+    let res = await getLogList({
         page: current,
         size: 10,
         title: title.value.trim(),
-        typeId: typeId.value,
     });
-    chapter.value.list = res.meta.data.docs;
-    chapter.value.pages = res.meta.data.total_page;
+    if (!res.status) {
+        log.value.list = res.meta.data.docs;
+        log.value.pages = res.meta.data.total_page;
+        console.log(log.value);
+    }
 }
 
-function changeType({ target }) {
-    typeId.value = target.value;
-}
-
-function linkToArticle(id) {
-    router.push(`/article/${id}`);
+function linkToArticle(doc) {
+    router.push(`/article/${doc._id}`);
 }
 </script>
 
