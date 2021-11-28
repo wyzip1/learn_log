@@ -26,13 +26,13 @@
 </template>
 
 <script setup>
-import { computed, defineEmit, defineProps, ref } from "vue";
+import { computed, defineEmits, ref } from "vue";
 
 const props = defineProps({
     total: { type: Number, require: true },
 });
 
-const emit = defineEmit(["onChange"]);
+const emit = defineEmits(["onChange"]);
 
 // data
 const current = ref(1);

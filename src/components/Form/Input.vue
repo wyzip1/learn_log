@@ -13,7 +13,6 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
 const props = defineProps({
     icon: String,
     modelValue: String,
@@ -39,7 +38,6 @@ const props = defineProps({
     border-radius: 20px;
     display: flex;
     align-items: center;
-    box-sizing: border-box;
     background-color: #fff;
 }
 

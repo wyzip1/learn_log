@@ -1,43 +1,64 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { getUserInfo } from './util'
+import store from './store';
+import { auth } from './config/axios-options';
 
 const routes = [
     {
         path: '/',
-        component: () => import('./views/Home.vue')
+        component: () => import('./views/Home/index.vue')
     }, {
         path: '/login',
-        component: () => import('./views/Login.vue')
-    }, {
-        path: '/center',
-        name: 'center',
-        component: () => import('./views/Center.vue'),
-        redirect: '/center/user',
+        redirect: '/login/index',
+        component: () => import('./views/Login/index.vue'),
         children: [
             {
-                path: 'edit',
-                name: 'edit',
-                component: () => import('./components/EditDoc.vue')
+                path: 'index',
+                component: () => import('./views/Login/Login/index.vue')
             },
             {
-                path: 'user',
-                name: 'user',
-                component: () => import('./views/User.vue')
-            },
+                path: 'register',
+                component: () => import('./views/Login/Register/index.vue')
+            }
         ]
     }, {
-        path: '/log',
-        name: 'log',
-        component: () => import('./views/Log.vue'),
+        path: '/category',
+        component: () => import('./views/Category/index.vue')
+    }, {
+        path: '/center',
+        component: () => import('./views/Center/index.vue'),
+        beforeEnter: (to, from) => {
+            auth();
+        },
+        redirect: '/center/index',
+        children: [
+            {
+                path: 'index',
+                component: () => import('./views/Center/managerArticle/index.vue')
+            }, {
+                path: 'type',
+                component: () => import('./views/Center/managerType/index.vue')
+            }, {
+                path: 'edit',
+                component: () => import('./views/Center/EditArticle/index.vue')
+            }
+        ]
     }, {
         path: '/article/:id',
-        name: 'article',
-        component: () => import('./views/Article.vue')
-    },
+        component: () => import('./views/Article/index.vue')
+    }
 ];
 
 const router = new createRouter({
     history: createWebHistory(),
     routes
 });
+
+router.beforeEach(() => {
+    const userInfo = getUserInfo();
+
+    store.commit('changeLoginState', userInfo.login || false)
+    return true
+})
 
 export default router;

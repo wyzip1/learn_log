@@ -1,25 +1,25 @@
-import request from './util'
+import request from '../config/axios-options'
 
-export function getType(normal = true) {
-    let url = normal ? '/type/list' : '/type/notloglist'
+export function getType() {
+    let url = '/type/list'
     return request({
         url,
-        type: 'GET'
+        method: 'GET'
     })
 }
 
-export function addType(params) {
+export function addType(data) {
     return request({
         url: '/type/add',
-        type: 'POST',
-        params
+        method: 'POST',
+        data
     })
 }
 
 export function delType(params) {
     return request({
         url: '/type/del',
-        type: 'DELETE',
+        method: 'DELETE',
         params
     })
 }

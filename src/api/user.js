@@ -1,9 +1,17 @@
-import request from './util'
+import request from '../config/axios-options'
 
-export function doLoign(params) {
+export function doLoign(data) {
     return request({
         url: '/login',
-        type: 'POST',
-        params
+        method: 'POST',
+        data
     })
+}
+
+export function register(data) {
+    return request({
+        url: '/register',
+        method: 'POST',
+        data
+    });
 }
